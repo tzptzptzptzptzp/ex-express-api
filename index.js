@@ -1,5 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
+
+const postAPI = require("./api/post");
 
 // ポート番号の定義
 const PORT = 3000;
@@ -13,6 +16,8 @@ app.get("/", (req, res) => {
     `<h1>The browser is accessing <a href="http://localhost:${PORT}${req.baseUrl}">http://localhost:${PORT}${req.baseUrl}</a>.</h1>`
   );
 });
+
+app.use("/api", postAPI);
 
 // サーバーを起動
 app.listen(PORT, () => {
