@@ -1,8 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
+const mysql = require("mysql2");
 
 // ポート番号の定義
 const PORT = 3000;
+
+// データベース接続
+const conection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+});
 
 // サーバーの作成
 app.get("/", (req, res) => {
