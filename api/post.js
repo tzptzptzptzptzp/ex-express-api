@@ -25,4 +25,37 @@ router.get("/posts", (req, res) => {
   });
 });
 
+// IDに対応したデータを取得
+router.get("/posts/:id", (req, res) => {
+  const query = `SELECT * FROM ${process.env.TABLE_NAME}`;
+  conection.execute(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    const data = results.map((row) => ({ ...row }));
+    const post = data.find((post) => post.id === parseInt(req.params.id));
+    res.send(post);
+  });
+});
+
+// データを保存
+router.post("/posts", (req, res) => {
+  const { title, published } = req.body;
+  const query = `INSERT INTO ${process.env.TABLE_NAME} (title, published) VALUES (?, ?)`;
+  conection.execute(query, [title, published], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    const postID = results.insertId;
+    const post = {
+      id: postID,
+      title,
+      published,
+    };
+    res.json(post);
+  });
+});
+
 module.exports = router;

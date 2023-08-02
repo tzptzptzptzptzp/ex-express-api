@@ -7,6 +7,9 @@ const postAPI = require("./api/post");
 // ポート番号の定義
 const PORT = 3000;
 
+// リクエストをJSON形式で受け取る
+app.use(express.json());
+
 // サーバーの作成
 app.get("/", (req, res) => {
   console.log(
