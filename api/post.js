@@ -39,4 +39,23 @@ router.get("/posts/:id", (req, res) => {
   });
 });
 
+// データを保存
+router.post("/posts", (req, res) => {
+  const { title, published } = req.body;
+  const query = `INSERT INTO ${process.env.TABLE_NAME} (title, published) VALUES (?, ?)`;
+  conection.execute(query, [title, published], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    const postID = results.insertId;
+    const post = {
+      id: postID,
+      title,
+      published,
+    };
+    res.json(post);
+  });
+});
+
 module.exports = router;
