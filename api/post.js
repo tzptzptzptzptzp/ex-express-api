@@ -58,4 +58,23 @@ router.post("/posts", (req, res) => {
   });
 });
 
+// データを更新
+router.put("/posts/:id", (req, res) => {
+  const { title, published } = req.body;
+  const id = req.params.id;
+  const query = `UPDATE ${process.env.TABLE_NAME} SET title = ?, published = ? WHERE id = ?`;
+  conection.execute(query, [title, published, id], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    const post = {
+      id,
+      title,
+      published,
+    };
+    res.json(post);
+  });
+});
+
 module.exports = router;
