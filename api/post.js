@@ -21,7 +21,7 @@ router.get("/posts", (req, res) => {
       return;
     }
     const data = results.map((row) => ({ ...row }));
-    res.send(data);
+    res.json(data);
   });
 });
 
@@ -35,7 +35,7 @@ router.get("/posts/:id", (req, res) => {
     }
     const data = results.map((row) => ({ ...row }));
     const post = data.find((post) => post.id === parseInt(req.params.id));
-    res.send(post);
+    res.json(post);
   });
 });
 
@@ -55,6 +55,38 @@ router.post("/posts", (req, res) => {
       published,
     };
     res.json(post);
+  });
+});
+
+// データを更新
+router.put("/posts/:id", (req, res) => {
+  const { title, published } = req.body;
+  const id = req.params.id;
+  const query = `UPDATE ${process.env.TABLE_NAME} SET title = ?, published = ? WHERE id = ?`;
+  conection.execute(query, [title, published, id], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    const post = {
+      id,
+      title,
+      published,
+    };
+    res.json(post);
+  });
+});
+
+// データを削除
+router.delete("/posts/:id", (req, res) => {
+  const id = req.params.id;
+  const query = `DELETE FROM ${process.env.TABLE_NAME} WHERE id = ${id}`;
+  conection.execute(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    res.send("Deleted the data.");
   });
 });
 
