@@ -77,4 +77,17 @@ router.put("/posts/:id", (req, res) => {
   });
 });
 
+// データを削除
+router.delete("/posts/:id", (req, res) => {
+  const id = req.params.id;
+  const query = `DELETE FROM ${process.env.TABLE_NAME} WHERE id = ${id}`;
+  conection.execute(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return;
+    }
+    res.send("Deleted the data.");
+  });
+});
+
 module.exports = router;
