@@ -21,7 +21,7 @@ router.get("/posts", (req, res) => {
       return;
     }
     const data = results.map((row) => ({ ...row }));
-    res.send(data);
+    res.json(data);
   });
 });
 
@@ -35,7 +35,7 @@ router.get("/posts/:id", (req, res) => {
     }
     const data = results.map((row) => ({ ...row }));
     const post = data.find((post) => post.id === parseInt(req.params.id));
-    res.send(post);
+    res.json(post);
   });
 });
 
